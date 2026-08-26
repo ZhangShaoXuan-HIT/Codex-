@@ -1,4 +1,4 @@
-# 修复 ChatGPT 桌面版 `spawn EINVAL` —— 方法二：winget 安装官方 Codex CLI
+# 修复 ChatGPT 桌面版更新后路径错误问题 —— winget 安装官方 Codex CLI
 
 > 适用系统：Windows（PowerShell）
 > 更新时间：2026-08-26
@@ -14,20 +14,6 @@ ChatGPT failed to start.
 Unable to locate the Codex CLI binary.
 Set CODEX_CLI_PATH or ensure the Electron resources include bin/codex.
 ```
-
-按「方案二」设置了 `CODEX_CLI_PATH` 后，应用仍报错：
-
-```
-spawn EINVAL
-```
-
-### 原因分析
-
-`spawn EINVAL` 通常是因为 `CODEX_CLI_PATH` 指向了 **`.cmd` 包装文件（npm shim）**，而不是真正的可执行程序。
-
-- npm 全局安装 `@openai/codex` 后，`where.exe codex` 返回的往往是：
-  `C:\Users\<用户名>\AppData\Roaming\npm\codex.cmd`
-- Electron 应用使用底层 `spawn` 启动 Codex 时**不走 shell，无法执行 `.cmd` 文件**，因此抛出 `EINVAL`（参数无效）。
 
 ### 解决思路
 
